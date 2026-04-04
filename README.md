@@ -162,17 +162,30 @@ USE finance_db;
 ---
 
 
-### Finance Dashboard API-User Controller
-![](docs/screenshot_1.png)
+## 📸 API Screenshots
 
-### Financial APIs - financial-record-controller and auth-controller and dashboard-controller
-![](docs/screenshot_2.png)
+### 🔐 Authentication APIs
+![Auth APIs](docs/screenshot-auth.png)
 
-###  Schemas
-![Financial APIs  Schemas](docs/screenshot_3.png)
+---
 
-### Schemas
-![Financial APIs Schemas](docs/screenshot_4.png)
+### 👤 User Management APIs (ADMIN)
+![User APIs](docs/screenshot-users.png)
+
+---
+
+### 💰 Financial Records APIs
+![Financial APIs](docs/screenshot-records.png)
+
+---
+
+### 📊 Dashboard Analytics APIs
+![Dashboard APIs](docs/screenshot-dashboard.png)
+
+---
+
+### 🧩 Data Schemas
+![Schemas](docs/screenshot-schemas.png)
 
 
 ## Environment Configuration
