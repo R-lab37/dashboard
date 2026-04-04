@@ -164,28 +164,27 @@ USE finance_db;
 
 ## 📸 API Screenshots
 
-### 🔐 Authentication APIs
+### 🔐 API Screen Short
 ![Auth APIs](docs/Screenshot_1.png)
 
 ---
 
-### 👤 User Management APIs (ADMIN)
+### 👤 API Screen Short
 ![User APIs](docs/Screenshot_2.png)
 
 ---
 
-### 💰 Financial Records APIs
+### 🧩 Data Schemas
 ![Financial APIs](docs/Screenshot_3.png)
 
 ---
 
-### 📊 Dashboard Analytics APIs
+### 🧩 Data Schemas
 ![Dashboard APIs](docs/Screenshot_4.png)
 
 ---
 
-### 🧩 Data Schemas
-![Schemas](docs/screenshot-schemas.png)
+
 
 
 ## Environment Configuration
