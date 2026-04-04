@@ -21,9 +21,6 @@ CREATE DATABASE finance_db;
 
 ### Environment
 Edit `src/main/resources/application.properties`:
-spring.datasource.username=root
-spring.datasource.password=yourpassword
-jwt.secret=your-256-bit-secret
 
 ### Run
 ```bash
