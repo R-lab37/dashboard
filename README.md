@@ -157,47 +157,23 @@ Then load the seed data to get 5 users and 20 financial records ready for testin
 
 ```sql
 USE finance_db;
-
-SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE TABLE financial_records;
-TRUNCATE TABLE users;
-SET FOREIGN_KEY_CHECKS = 1;
-
--- Insert users (password for all: "password")
-INSERT INTO users (id, email, password, full_name, role, active, created_at, updated_at) VALUES
-('00000001-0000-0000-0000-000000000001', 'admin@finance.com',    '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.', 'Admin User',    'ADMIN',   1, NOW(), NOW()),
-('00000002-0000-0000-0000-000000000002', 'analyst1@finance.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.', 'Analyst One',  'ANALYST', 1, NOW(), NOW()),
-('00000003-0000-0000-0000-000000000003', 'analyst2@finance.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.', 'Analyst Two',  'ANALYST', 1, NOW(), NOW()),
-('00000004-0000-0000-0000-000000000004', 'viewer1@finance.com',  '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.', 'Viewer One',   'VIEWER',  1, NOW(), NOW()),
-('00000005-0000-0000-0000-000000000005', 'viewer2@finance.com',  '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.', 'Viewer Two',   'VIEWER',  0, NOW(), NOW());
-
--- Insert 20 financial records (r020 is soft-deleted to test delete filter)
-INSERT INTO financial_records (id, amount, type, category, date, notes, deleted, created_by, created_at, updated_at) VALUES
-('10000001-0000-0000-0000-000000000001', 75000.00, 'INCOME',  'SALARY',        '2024-01-01', 'January salary credit',          0, '00000001-0000-0000-0000-000000000001', NOW(), NOW()),
-('10000002-0000-0000-0000-000000000002', 18000.00, 'INCOME',  'FREELANCE',     '2024-01-10', 'Logo design project payment',    0, '00000002-0000-0000-0000-000000000002', NOW(), NOW()),
-('10000003-0000-0000-0000-000000000003', 20000.00, 'EXPENSE', 'RENT',          '2024-01-05', 'January house rent',             0, '00000001-0000-0000-0000-000000000001', NOW(), NOW()),
-('10000004-0000-0000-0000-000000000004',  4500.00, 'EXPENSE', 'FOOD',          '2024-01-15', 'Monthly grocery shopping',       0, '00000002-0000-0000-0000-000000000002', NOW(), NOW()),
-('10000005-0000-0000-0000-000000000005',  3200.00, 'EXPENSE', 'UTILITIES',     '2024-01-20', 'Electricity and water bill',     0, '00000001-0000-0000-0000-000000000001', NOW(), NOW()),
-('10000006-0000-0000-0000-000000000006', 75000.00, 'INCOME',  'SALARY',        '2024-02-01', 'February salary credit',         0, '00000001-0000-0000-0000-000000000001', NOW(), NOW()),
-('10000007-0000-0000-0000-000000000007', 12500.00, 'INCOME',  'INVESTMENT',    '2024-02-14', 'Mutual fund dividend payout',    0, '00000002-0000-0000-0000-000000000002', NOW(), NOW()),
-('10000008-0000-0000-0000-000000000008', 20000.00, 'EXPENSE', 'RENT',          '2024-02-05', 'February house rent',            0, '00000001-0000-0000-0000-000000000001', NOW(), NOW()),
-('10000009-0000-0000-0000-000000000009',  2800.00, 'EXPENSE', 'TRANSPORT',     '2024-02-18', 'Fuel refill and cab rides',      0, '00000002-0000-0000-0000-000000000002', NOW(), NOW()),
-('10000010-0000-0000-0000-000000000010',  5500.00, 'EXPENSE', 'HEALTHCARE',    '2024-02-22', 'Doctor visit and medicines',     0, '00000001-0000-0000-0000-000000000001', NOW(), NOW()),
-('10000011-0000-0000-0000-000000000011', 75000.00, 'INCOME',  'SALARY',        '2024-03-01', 'March salary credit',            0, '00000001-0000-0000-0000-000000000001', NOW(), NOW()),
-('10000012-0000-0000-0000-000000000012', 22000.00, 'INCOME',  'FREELANCE',     '2024-03-08', 'E-commerce website development', 0, '00000002-0000-0000-0000-000000000002', NOW(), NOW()),
-('10000013-0000-0000-0000-000000000013',  9500.00, 'INCOME',  'INVESTMENT',    '2024-03-20', 'Stock portfolio returns',        0, '00000001-0000-0000-0000-000000000001', NOW(), NOW()),
-('10000014-0000-0000-0000-000000000014', 20000.00, 'EXPENSE', 'RENT',          '2024-03-05', 'March house rent',               0, '00000001-0000-0000-0000-000000000001', NOW(), NOW()),
-('10000015-0000-0000-0000-000000000015',  6200.00, 'EXPENSE', 'ENTERTAINMENT', '2024-03-12', 'Weekend trip and hotel stay',    0, '00000002-0000-0000-0000-000000000002', NOW(), NOW()),
-('10000016-0000-0000-0000-000000000016',  3800.00, 'EXPENSE', 'FOOD',          '2024-03-25', 'Restaurant and grocery bills',   0, '00000001-0000-0000-0000-000000000001', NOW(), NOW()),
-('10000017-0000-0000-0000-000000000017', 75000.00, 'INCOME',  'SALARY',        '2024-04-01', 'April salary credit',            0, '00000001-0000-0000-0000-000000000001', NOW(), NOW()),
-('10000018-0000-0000-0000-000000000018', 15000.00, 'INCOME',  'FREELANCE',     '2024-04-11', 'Mobile app UI design payment',   0, '00000002-0000-0000-0000-000000000002', NOW(), NOW()),
-('10000019-0000-0000-0000-000000000019',  4100.00, 'EXPENSE', 'TRANSPORT',     '2024-04-16', 'Monthly travel expenses',        0, '00000001-0000-0000-0000-000000000001', NOW(), NOW()),
-('10000020-0000-0000-0000-000000000020',  2900.00, 'EXPENSE', 'OTHER',         '2024-04-28', 'Miscellaneous April expenses',   1, '00000001-0000-0000-0000-000000000001', NOW(), NOW());
 ```
 
-> Record `r020` has `deleted = 1` intentionally. It should not appear in any `GET /api/records` response — this verifies the soft delete filter is working correctly.
-
 ---
+
+
+### Finance Dashboard API-User Controller
+![](docs/screenshot_1.png)
+
+### Financial APIs - financial-record-controller and auth-controller and dashboard-controller
+![](docs/screenshot_2.png)
+
+###  Schemas
+![Financial APIs  Schemas](docs/screenshot_3.png)
+
+### Schemas
+![Financial APIs Schemas](docs/screenshot_4.png)
+
 
 ## Environment Configuration
 
