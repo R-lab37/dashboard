@@ -481,6 +481,580 @@ Expected results from the seed data (19 visible records, 1 soft-deleted):
 
 ---
 
+
+Here is every API endpoint with full request bodies, headers, and expected responses — ready to test in Postman or any HTTP client.
+
+---
+
+## Base URL
+```
+http://localhost:8080
+```
+
+---
+
+## 1 — Auth endpoints (Public — no token needed)
+
+### Register
+```http
+POST /api/auth/register
+Content-Type: application/json
+
+{
+  "email": "admin@finance.com",
+  "password": "admin123",
+  "fullName": "Admin User",
+  "role": "ADMIN"
+}
+```
+
+**Expected response `201`:**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiJ9...",
+  "email": "admin@finance.com",
+  "fullName": "Admin User",
+  "role": "ADMIN",
+  "active": true
+}
+```
+
+---
+
+### Register an Analyst
+```http
+POST /api/auth/register
+Content-Type: application/json
+
+{
+  "email": "analyst@finance.com",
+  "password": "analyst123",
+  "fullName": "Analyst User",
+  "role": "ANALYST"
+}
+```
+
+---
+
+### Register a Viewer
+```http
+POST /api/auth/register
+Content-Type: application/json
+
+{
+  "email": "viewer@finance.com",
+  "password": "viewer123",
+  "fullName": "Viewer User",
+  "role": "VIEWER"
+}
+```
+
+---
+
+### Login
+```http
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@finance.com",
+  "password": "admin123"
+}
+```
+
+**Expected response `200`:**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiJ9...",
+  "email": "admin@finance.com",
+  "fullName": "Admin User",
+  "role": "ADMIN",
+  "active": true
+}
+```
+
+> Copy the `token` value — use it as `Bearer <token>` in all requests below.
+
+---
+
+## 2 — User endpoints (ADMIN token required)
+
+### Get all users
+```http
+GET /api/users
+Authorization: Bearer <admin_token>
+```
+
+**Expected response `200`:**
+```json
+[
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "email": "admin@finance.com",
+    "fullName": "Admin User",
+    "role": "ADMIN",
+    "active": true,
+    "createdAt": "2024-03-01T10:00:00",
+    "updatedAt": "2024-03-01T10:00:00"
+  }
+]
+```
+
+---
+
+### Get only active users
+```http
+GET /api/users/active
+Authorization: Bearer <admin_token>
+```
+
+---
+
+### Get single user
+```http
+GET /api/users/{id}
+Authorization: Bearer <admin_token>
+```
+
+**Example:**
+```http
+GET /api/users/550e8400-e29b-41d4-a716-446655440000
+Authorization: Bearer <admin_token>
+```
+
+---
+
+### Update user role
+```http
+PUT /api/users/{id}/role
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+
+{
+  "role": "ANALYST"
+}
+```
+
+Valid role values: `VIEWER`, `ANALYST`, `ADMIN`
+
+---
+
+### Update user status (activate / deactivate)
+```http
+PUT /api/users/{id}/status
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+
+{
+  "active": false
+}
+```
+
+---
+
+### Delete user
+```http
+DELETE /api/users/{id}
+Authorization: Bearer <admin_token>
+```
+
+**Expected response `200`:**
+```json
+{
+  "message": "User deleted successfully"
+}
+```
+
+---
+
+## 3 — Financial Records endpoints
+
+### Create a record (ANALYST or ADMIN token)
+```http
+POST /api/records
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+
+{
+  "amount": 50000.00,
+  "type": "INCOME",
+  "category": "SALARY",
+  "date": "2024-03-01",
+  "notes": "March salary"
+}
+```
+
+**Expected response `201`:**
+```json
+{
+  "id": "abc123...",
+  "amount": 50000.00,
+  "type": "INCOME",
+  "category": "SALARY",
+  "date": "2024-03-01",
+  "notes": "March salary",
+  "deleted": false,
+  "createdAt": "2024-03-01T10:00:00"
+}
+```
+
+---
+
+### Create more records (run these to get useful dashboard data)
+
+**Expense — Rent:**
+```http
+POST /api/records
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+
+{
+  "amount": 15000.00,
+  "type": "EXPENSE",
+  "category": "RENT",
+  "date": "2024-03-02",
+  "notes": "Monthly rent"
+}
+```
+
+**Expense — Food:**
+```http
+POST /api/records
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+
+{
+  "amount": 3500.00,
+  "type": "EXPENSE",
+  "category": "FOOD",
+  "date": "2024-03-05",
+  "notes": "Groceries"
+}
+```
+
+**Income — Freelance:**
+```http
+POST /api/records
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+
+{
+  "amount": 12000.00,
+  "type": "INCOME",
+  "category": "FREELANCE",
+  "date": "2024-03-10",
+  "notes": "Website project"
+}
+```
+
+**Expense — Transport:**
+```http
+POST /api/records
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+
+{
+  "amount": 2000.00,
+  "type": "EXPENSE",
+  "category": "TRANSPORT",
+  "date": "2024-03-12",
+  "notes": "Fuel and cab"
+}
+```
+
+**Income — Investment:**
+```http
+POST /api/records
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+
+{
+  "amount": 8000.00,
+  "type": "INCOME",
+  "category": "INVESTMENT",
+  "date": "2024-02-15",
+  "notes": "Mutual fund returns"
+}
+```
+
+---
+
+### Get all records (no filters)
+```http
+GET /api/records
+Authorization: Bearer <admin_token>
+```
+
+---
+
+### Get records with pagination
+```http
+GET /api/records?page=0&size=5
+Authorization: Bearer <admin_token>
+```
+
+---
+
+### Filter by type
+```http
+GET /api/records?type=INCOME
+Authorization: Bearer <admin_token>
+```
+
+```http
+GET /api/records?type=EXPENSE
+Authorization: Bearer <admin_token>
+```
+
+---
+
+### Filter by category
+```http
+GET /api/records?category=SALARY
+Authorization: Bearer <admin_token>
+```
+
+```http
+GET /api/records?category=RENT
+Authorization: Bearer <admin_token>
+```
+
+---
+
+### Filter by date range
+```http
+GET /api/records?from=2024-03-01&to=2024-03-31
+Authorization: Bearer <admin_token>
+```
+
+---
+
+### Combined filters
+```http
+GET /api/records?type=EXPENSE&category=FOOD&from=2024-01-01&to=2024-12-31&page=0&size=10
+Authorization: Bearer <admin_token>
+```
+
+---
+
+### Get single record
+```http
+GET /api/records/{id}
+Authorization: Bearer <admin_token>
+```
+
+---
+
+### Update a record (ANALYST or ADMIN)
+```http
+PUT /api/records/{id}
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+
+{
+  "amount": 55000.00,
+  "type": "INCOME",
+  "category": "SALARY",
+  "date": "2024-03-01",
+  "notes": "March salary revised"
+}
+```
+
+---
+
+### Delete a record — soft delete (ADMIN only)
+```http
+DELETE /api/records/{id}
+Authorization: Bearer <admin_token>
+```
+
+**Expected response `200`:**
+```json
+{
+  "message": "Record deleted"
+}
+```
+
+---
+
+## 4 — Dashboard endpoints (VIEWER and above)
+
+### Full dashboard summary
+```http
+GET /api/dashboard/summary
+Authorization: Bearer <viewer_token>
+```
+
+**Expected response `200`:**
+```json
+{
+  "totalIncome": 70000.00,
+  "totalExpenses": 20500.00,
+  "netBalance": 49500.00,
+  "incomeByCategory": {
+    "SALARY": 50000.00,
+    "FREELANCE": 12000.00,
+    "INVESTMENT": 8000.00
+  },
+  "expensesByCategory": {
+    "RENT": 15000.00,
+    "FOOD": 3500.00,
+    "TRANSPORT": 2000.00
+  },
+  "monthlyIncomeTrend": [
+    { "month": "2024-02", "amount": 8000.00 },
+    { "month": "2024-03", "amount": 62000.00 }
+  ],
+  "monthlyExpenseTrend": [
+    { "month": "2024-03", "amount": 20500.00 }
+  ],
+  "recentActivity": [
+    {
+      "id": "abc123",
+      "amount": 2000.00,
+      "type": "EXPENSE",
+      "category": "TRANSPORT",
+      "date": "2024-03-12",
+      "notes": "Fuel and cab"
+    }
+  ]
+}
+```
+
+---
+
+## 5 — Validation error tests
+
+### Missing required fields
+```http
+POST /api/auth/register
+Content-Type: application/json
+
+{
+  "email": "bad-email",
+  "password": "123"
+}
+```
+
+**Expected response `400`:**
+```json
+{
+  "status": 400,
+  "errors": {
+    "email": "must be a well-formed email address",
+    "password": "size must be between 6 and 2147483647",
+    "fullName": "must not be blank",
+    "role": "must not be null"
+  }
+}
+```
+
+---
+
+### Invalid amount
+```http
+POST /api/records
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+
+{
+  "amount": -100,
+  "type": "INCOME",
+  "category": "SALARY",
+  "date": "2024-03-01"
+}
+```
+
+**Expected response `400`:**
+```json
+{
+  "status": 400,
+  "errors": {
+    "amount": "must be greater than or equal to 0.01"
+  }
+}
+```
+
+---
+
+### Access denied — VIEWER tries to create record
+```http
+POST /api/records
+Authorization: Bearer <viewer_token>
+Content-Type: application/json
+
+{
+  "amount": 1000,
+  "type": "INCOME",
+  "category": "SALARY",
+  "date": "2024-03-01"
+}
+```
+
+**Expected response `403`:**
+```json
+{
+  "status": 403,
+  "message": "Access denied"
+}
+```
+
+---
+
+### No token provided
+```http
+GET /api/records
+```
+
+**Expected response `403` or `401`**
+
+---
+
+### Record not found
+```http
+GET /api/records/non-existent-id
+Authorization: Bearer <admin_token>
+```
+
+**Expected response `404`:**
+```json
+{
+  "status": 404,
+  "message": "Record not found"
+}
+```
+
+---
+
+## 6 — Valid enum values reference
+
+| Field | Valid values |
+|-------|-------------|
+| `role` | `VIEWER`, `ANALYST`, `ADMIN` |
+| `type` | `INCOME`, `EXPENSE` |
+| `category` | `SALARY`, `FREELANCE`, `INVESTMENT`, `FOOD`, `RENT`, `UTILITIES`, `TRANSPORT`, `ENTERTAINMENT`, `HEALTHCARE`, `OTHER` |
+
+---
+
+## Postman quick setup
+
+1. Create a collection called **Finance Dashboard**
+2. Add a collection variable `base_url` = `http://localhost:8080`
+3. Add a collection variable `token` = *(empty for now)*
+4. In the **login** request, add this to the **Tests** tab to auto-save the token:
+
+```javascript
+const res = pm.response.json();
+pm.collectionVariables.set("token", res.token);
+```
+
+5. In all other requests set the header:
+```
+Authorization: Bearer {{token}}
+```
+
+This way you login once and every other request automatically uses the saved token.
+
 ## Assumptions and Tradeoffs
 
 | Topic | Decision | Reason |
